@@ -1,0 +1,56 @@
+pipeline {
+
+agent any
+
+environment {
+
+   ws = "$WORKSPACE/Prova-N2-2_app-fast "
+
+}
+
+stages {
+
+stage("workspace"){
+    steps {
+    echo ' criando o wrapper para o gradle '
+    dir("$ws") {
+        sh'$ws/gradle wrapper'
+    }
+
+  }
+}
+
+stage("testes de unit"){
+    steps {
+    echo 'executando testes de unit'
+    dir("$ws") {
+        sh'$ws/gradlew test'
+    }
+
+  }
+}
+
+stage("build do apk "){
+    steps {
+    echo 'executando build do apk'
+    dir("$ws") {
+        sh'$ws/gradlew lintRelease'
+    }
+
+  }
+}
+
+stage("arquivar apk "){
+    steps {
+    echo 'arquivando apk'
+    dir("$ws") {
+        sh'./archiveArtifacts artifacts: '**/app/build/outputs/apk/release/app-release-unsigned.apk', fingerprint: , allowEmptyArchive: true '
+    }
+
+  }
+}
+
+}
+
+
+}
