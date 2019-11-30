@@ -34,7 +34,7 @@ stage("build do apk "){
     steps {
     echo 'executando build do apk'
     dir("$ws") {
-        sh'$ws/gradlew lintRelease'
+        sh'$ws/gradlew assembleRelease'
     }
 
   }
